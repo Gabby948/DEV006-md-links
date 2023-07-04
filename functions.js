@@ -37,17 +37,17 @@ function isMdFile(inputPath) {
 
 // LECTURA DE DIRECTORIOS
 function readFilesInDirectory(directoryPath) {
- return new Promise((resolve, reject) => {
-   fs.readdir(directoryPath, (err, files) => {
-     if (err) {
-       reject(err);
-       // return;
-     } else {
-     resolve(files);
-     // console.log(resolve)
-   }
-   });
- });
+  return new Promise((resolve, reject) => {
+    fs.readdir(directoryPath, (err, files) => {
+      if (err) {
+        reject(err);
+        // return;
+      } else {
+        resolve(files);
+        // console.log(resolve)
+      }
+    });
+  });
 }
 
 // Leer contenido de un archivo
@@ -63,40 +63,40 @@ function readFileContent(filePath) {
   });
 }
 
-  // const readExtencionMd = (inputPath) => {
-  //   if (path.extname(inputPath) !== '.md') {
-  //     throw new Error('Invalid file format. Only .md files are supported.');
-  //   }
-  //   return true;
-  // };
+// const readExtencionMd = (inputPath) => {
+//   if (path.extname(inputPath) !== '.md') {
+//     throw new Error('Invalid file format. Only .md files are supported.');
+//   }
+//   return true;
+// };
 
 
 
-    // function findLinksInContent(content, inputPath) {
-    //   const links = [];
-    
-    //   // Convertir el contenido Markdown a HTML utilizando MarkdownIt
-    //   const md = new MarkdownIt();
-  
-    //   const html = md.render(content);
-    
-    //   // Crear un documento JSDOM a partir del HTML
-    //   const dom = new JSDOM(html);  // revisar
-    
-    //   // Obtener todos los elementos <a> del documento
-    //   const anchorElements = dom.window.document.querySelectorAll('a');
-    //   // Recorrer los elementos <a> utilizando map()
-    //   anchorElements.forEach((element) => {
-    //     const linkText = element.textContent;
-    //     const linkUrl = element.getAttribute('href');
-    //     links.push({ href: linkUrl, text: linkText, file: inputPath });
-    //   });
-    
-    //   return links;
-    // }
+// function findLinksInContent(content, inputPath) {
+//   const links = [];
+
+//   // Convertir el contenido Markdown a HTML utilizando MarkdownIt
+//   const md = new MarkdownIt();
+
+//   const html = md.render(content);
+
+//   // Crear un documento JSDOM a partir del HTML
+//   const dom = new JSDOM(html);  // revisar
+
+//   // Obtener todos los elementos <a> del documento
+//   const anchorElements = dom.window.document.querySelectorAll('a');
+//   // Recorrer los elementos <a> utilizando map()
+//   anchorElements.forEach((element) => {
+//     const linkText = element.textContent;
+//     const linkUrl = element.getAttribute('href');
+//     links.push({ href: linkUrl, text: linkText, file: inputPath });
+//   });
+
+//   return links;
+// }
 
 
-    // Extraer los links de un archivo Markdown
+// Extraer los links de un archivo Markdown
 function extractLinksFromMdFile(filePath) {
   return readFileContent(filePath).then((content) => {
     const links = [];
@@ -114,66 +114,72 @@ function extractLinksFromMdFile(filePath) {
     return links;
   });
 }
-   
-    // // Extraer links de archivos md
-    // function extractLinks(inputPath) {
-    //   return readFileInDirectory(inputPath)
-    //     .then((content) => {
-    //       return {
-    //         content: content,
-    //         isMdFile: readExtencionMd(inputPath)
-    //       };
-    //     })
-    //     .then(({ content, isMdFile }) => {
-    //       if (isMdFile) {
-    //         return findLinksInContent(content, inputPath);
-    //       } else {
-    //         return [];
-    //       }
-    //     })
-    //     .catch((err) => {
-    //       throw new Error('Error reading file: ' + err);
-    //     });
-    // }
-    function validateLinks(links) {
-      const linkPromises = links.map((link) => {
-        return axios.get(link.href)
-          .then((response) => {
-            const { status } = response;
-            const statusText = status >= 200 && status < 400 ? 'ok' : 'fail';
-    
-            return {
-              href: link.href,
-              text: link.text,
-              file: link.file,
-              status: status,
-              ok: statusText,
-            };
-          })
-          .catch((error) => {
-            return {
-              href: link.href,
-              text: link.text,
-              file: link.file,
-              status: 0,
-              ok: 'fail',
-            };
-          });
+
+// // Extraer links de archivos md
+// function extractLinks(inputPath) {
+//   return readFileInDirectory(inputPath)
+//     .then((content) => {
+//       return {
+//         content: content,
+//         isMdFile: readExtencionMd(inputPath)
+//       };
+//     })
+//     .then(({ content, isMdFile }) => {
+//       if (isMdFile) {
+//         return findLinksInContent(content, inputPath);
+//       } else {
+//         return [];
+//       }
+//     })
+//     .catch((err) => {
+//       throw new Error('Error reading file: ' + err);
+//     });
+// }
+function validateLinks(links) {
+  const linkPromises = links.map((link) => {
+    return axios.get(link.href)
+      .then((response) => {
+        const { status } = response;
+        const statusText = status >= 200 && status < 400 ? 'ok' : 'fail';
+
+        return {
+          href: link.href,
+          text: link.text,
+          file: link.file,
+          status: status,
+          ok: statusText,
+        };
+      })
+      .catch((error) => {
+        return {
+          href: link.href,
+          text: link.text,
+          file: link.file,
+          status: 0,
+          ok: 'fail',
+        };
       });
-      return Promise.all(linkPromises);
-    }
-    
- 
+  });
+  // console.log(linkPromises, 'hasta aqui');
+  return Promise.all(linkPromises);
+}
+// const mockLinks = [
+//   { href: 'https://nodejs.org/', text: 'Node.js', file: 'C:\\Users\\Gabi\\OneDrive\\Escritorio\\DEV006-md-links\\demo\\test2.md' },
+//   { href: 'https://es.wikipedia.org/l,dlsdwiki/Markdown2', text: 'Markdown', file: 'C:\\Users\\Gabi\\OneDrive\\Escritorio\\DEV006-md-links\\demo\\test1.md' },
+// ];
 
-    module.exports = {
+// validateLinks(mockLinks).then(res =>console.log(res, "probando links"))
 
-      isAbsolutePath,
-      resolvePath,
-      pathExists,
-      isMdFile,
-      readFileContent,
-      extractLinksFromMdFile,
-      readFilesInDirectory,
-      validateLinks
-      
-    };
+
+module.exports = {
+
+  isAbsolutePath,
+  resolvePath,
+  pathExists,
+  isMdFile,
+  readFileContent,
+  extractLinksFromMdFile,
+  readFilesInDirectory,
+  validateLinks
+
+};

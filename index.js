@@ -13,7 +13,7 @@ const {
 
 
  // Función principal mdLinks
-function mdLinks(inputPath, options = { validate: false }) {
+function mdLinks(inputPath, options = { validate: true }) {
   const absolute = isAbsolutePath(inputPath);
   if (!absolute) {
     return Promise.reject(new Error('Invalid path. Please provide an absolute path.'));
@@ -67,7 +67,7 @@ function mdLinks(inputPath, options = { validate: false }) {
 }
 
 // // Ejemplo de uso
-// mdLinks('C:/Users/Gabi/OneDrive/Escritorio/DEV006-md-links/demo', { validate: false })
+// mdLinks('C:/Users/Gabi/OneDrive/Escritorio/DEV006-md-links/demo', { validate: true })
 //   .then((links) => {
 //     links.forEach((link) => {
 //       console.log('href:', link.href);

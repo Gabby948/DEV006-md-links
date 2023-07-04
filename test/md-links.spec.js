@@ -9,7 +9,7 @@ const {
   readFilesInDirectory,
   validateLinks
 } = require('../functions');
-const { mdLinks } = require('../index');
+const { mdLinks } = require('../index.js');
 const { JSDOM } = require('jsdom');
 const MarkdownIt = require('markdown-it');
 const fs = require('fs');
@@ -101,11 +101,12 @@ describe('validateLinks', () => {
     // Configura el mock de axios para que devuelva respuestas simuladas
     axios.get.mockResolvedValueOnce({ status: 200 }); // Enlace válido
     axios.get.mockRejectedValueOnce({ response: { status: 404 } }); // Enlace inválido
-
+     console.log(typeof validateLinks(mockLinks), "verificando");
     // Llama a la función validateLinks
-    return validateLinks(mockLinks).then((validateLinks) => {
+    return validateLinks(mockLinks).then((response) => {
+      console.log(response, "validateLinks");
       // Comprueba que los enlaces se hayan validado correctamente
-      expect(validateLinks).toEqual([
+      expect(response).toEqual([
         {
           href: 'https://nodejs.org/',
           text: 'Node.js',
