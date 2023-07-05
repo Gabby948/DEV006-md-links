@@ -1,4 +1,4 @@
-// const mdLinks = require('./mdLinks');
+
 const {
   isAbsolutePath,
   resolvePath,
@@ -9,7 +9,7 @@ const {
   readFilesInDirectory,
   validateLinks
 } = require('../functions');
-const { mdLinks } = require('../index.js');
+const mdLinks = require('../index.js');
 const { JSDOM } = require('jsdom');
 const MarkdownIt = require('markdown-it');
 const fs = require('fs');
@@ -17,26 +17,20 @@ const path = require('path');
 const axios = require('axios');
 
 // const pathInputFile = '.\\demo\\test2.md';
-const pathInputFile = 'C:\\Users\\Gabi\\OneDrive\\Escritorio\\DEV006-md-links\\demo\\test2.md';
-const pathInputDir = 'C:\\Users\\Gabi\\OneDrive\\Escritorio\\DEV006-md-links\\demo';
+// const pathInputFile = 'C:\\Users\\Gabi\\OneDrive\\Escritorio\\DEV006-md-links\\demo\\test2.md';
+// const pathInputDir = 'C:\\Users\\Gabi\\OneDrive\\Escritorio\\DEV006-md-links\\demo';
+const inputPath = process.cwd();
+// const pathInputDir = require('path').resolve();
+
 // const pathInputDir = '.\\demo';
 jest.mock('axios');
-jest.mock('../functions', () => {
-  const originalModule = jest.requireActual('../functions');
-  const mockedModule = Object.assign({}, originalModule);
-  mockedModule.readFileContent = jest.fn();
-  mockedModule.validateLinks = jest.fn();
-  // Agrega otras funciones asincrónicas que desees mockear
-  return mockedModule;
-});
-
 
 // Mock de la función readFileContent
 // jest.mock('../functions', () => ({ readFileContent: jest.fn() }));
 
 describe('isAbsolutePath', () => {
   test('Should return true for an absolute path', () => {
-    const result = isAbsolutePath(pathInputFile);
+    const result = isAbsolutePath(inputPath);
     expect(result).toBe(true);
   });
 
@@ -48,14 +42,14 @@ describe('isAbsolutePath', () => {
 
 describe('resolvePath', () => {
   test('Should return the resolved absolute path', () => {
-    const result = resolvePath(pathInputDir);
-    expect(result).toBe(pathInputDir);
+    const result = resolvePath(inputPath);
+    expect(result).toBe(inputPath);
   });
 });
 
 describe('pathExists', () => {
   test('Should resolve with true for an existing path', () => {
-    return pathExists(pathInputFile)
+    return pathExists(inputPath)
       .then(result => {
         expect(result).toBe(true);
       });
@@ -78,13 +72,13 @@ describe('extractLinksFromMdFile', () => {
     `;
 
     // Configura el mock para la función readFileContent
-    readFileContent.mockResolvedValue(mockContent);
+    // readFileContent.mockResolvedValue(mockContent);
 
     // Llama a la función extractLinksFromMdFile
-    return extractLinksFromMdFile('C:\\Users\\Gabi\\OneDrive\\Escritorio\\DEV006-md-links\\demo\\test2.md').then((links) => {
+    return extractLinksFromMdFile('./demo/test2.md').then((links) => {
       // Comprueba que se hayan extraído los enlaces correctamente
       expect(links).toEqual([
-        { href: 'https://nodejs.org/', text: 'Node.js', file: 'C:\\Users\\Gabi\\OneDrive\\Escritorio\\DEV006-md-links\\demo\\test2.md' },
+        { href: 'https://nodejs.org/', text: 'Node.js', file: './demo/test2.md' },
       ]);
     });
   });
@@ -94,30 +88,29 @@ describe('extractLinksFromMdFile', () => {
 describe('validateLinks', () => {
   test('debería validar los enlaces correctamente', () => {
     const mockLinks = [
-      { href: 'https://nodejs.org/', text: 'Node.js', file: 'C:\\Users\\Gabi\\OneDrive\\Escritorio\\DEV006-md-links\\demo\\test2.md' },
-      { href: 'https://es.wikipedia.org/l,dlsdwiki/Markdown2', text: 'Markdown', file: 'C:\\Users\\Gabi\\OneDrive\\Escritorio\\DEV006-md-links\\demo\\test1.md' },
+      { href: 'https://nodejs.org/', text: 'Node.js', file: './demo/test2.md' },
+      { href: 'https://es.wikipedia.org/l,dlsdwiki/Markdown2', text: 'Markdown', file: './demo/test1.md' },
     ];
 
     // Configura el mock de axios para que devuelva respuestas simuladas
     axios.get.mockResolvedValueOnce({ status: 200 }); // Enlace válido
     axios.get.mockRejectedValueOnce({ response: { status: 404 } }); // Enlace inválido
-     console.log(typeof validateLinks(mockLinks), "verificando");
+    //  console.log(typeof validateLinks(mockLinks), "verificando");
     // Llama a la función validateLinks
     return validateLinks(mockLinks).then((response) => {
-      console.log(response, "validateLinks");
       // Comprueba que los enlaces se hayan validado correctamente
       expect(response).toEqual([
         {
           href: 'https://nodejs.org/',
           text: 'Node.js',
-          file: 'C:\\Users\\Gabi\\OneDrive\\Escritorio\\DEV006-md-links\\demo\\test2.md',
+          file: './demo/test2.md',
           status: 200,
           ok: 'ok',
         },
         {
           href: 'https://es.wikipedia.org/l,dlsdwiki/Markdown2',
           text: 'Markdown',
-          file: 'C:\\Users\\Gabi\\OneDrive\\Escritorio\\DEV006-md-links\\demo\\test1.md',
+          file: './demo/test1.md',
           status: 0,
           ok: 'fail',
         },
@@ -129,8 +122,10 @@ describe('validateLinks', () => {
 
 describe('mdLinks', () => {
   test('debería retornar un array de objetos con los enlaces encontrados en el archivo Markdown', () => {
-    const inputPath = 'C:\\Users\\Gabi\\OneDrive\\Escritorio\\DEV006-md-links\\demo\\test2.md';
+    // const inputPath = 'C:\\Users\\Gabi\\OneDrive\\Escritorio\\DEV006-md-links\\demo\\test2.md';
     const options = { validate: true };
+
+    axios.get.mockResolvedValueOnce({ status: 200 }); // Enlace válido
 
     return mdLinks(inputPath, options).then((links) => {
       expect(links).toEqual([
@@ -141,7 +136,6 @@ describe('mdLinks', () => {
           status: 200,
           ok: 'ok',
         },
-        // Otros enlaces encontrados...
       ]);
     });
   });

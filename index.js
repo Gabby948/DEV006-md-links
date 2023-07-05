@@ -66,19 +66,19 @@ function mdLinks(inputPath, options = { validate: true }) {
   return processPathRecursive(resolvedPath);
 }
 
-// // Ejemplo de uso
-// mdLinks('C:/Users/Gabi/OneDrive/Escritorio/DEV006-md-links/demo', { validate: true })
-//   .then((links) => {
-//     links.forEach((link) => {
-//       console.log('href:', link.href);
-//       console.log('text:', link.text);
-//       console.log('file:', link.file);
-//       console.log('--------------------------');
-//     });
-//   })
-//   .catch((error) => {
-//     console.error('Error:', error);
-//   });
+// Ejemplo de uso
+mdLinks('C:/Users/Gabi/OneDrive/Escritorio/DEV006-md-links/demo', { validate: true })
+  .then((links) => {
+    links.forEach((link) => {
+      console.log('href:', link.href);
+      console.log('text:', link.text);
+      console.log('file:', link.file);
+      console.log('--------------------------');
+    });
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
 
 module.exports = mdLinks;
 

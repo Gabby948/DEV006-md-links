@@ -140,7 +140,7 @@ function validateLinks(links) {
     return axios.get(link.href)
       .then((response) => {
         const { status } = response;
-        const statusText = status >= 200 && status < 400 ? 'ok' : 'fail';
+        const statusText = status >= 200 && status < 404 ? 'ok' : 'fail';
 
         return {
           href: link.href,
@@ -160,15 +160,10 @@ function validateLinks(links) {
         };
       });
   });
-  // console.log(linkPromises, 'hasta aqui');
+ 
   return Promise.all(linkPromises);
 }
-// const mockLinks = [
-//   { href: 'https://nodejs.org/', text: 'Node.js', file: 'C:\\Users\\Gabi\\OneDrive\\Escritorio\\DEV006-md-links\\demo\\test2.md' },
-//   { href: 'https://es.wikipedia.org/l,dlsdwiki/Markdown2', text: 'Markdown', file: 'C:\\Users\\Gabi\\OneDrive\\Escritorio\\DEV006-md-links\\demo\\test1.md' },
-// ];
 
-// validateLinks(mockLinks).then(res =>console.log(res, "probando links"))
 
 
 module.exports = {
