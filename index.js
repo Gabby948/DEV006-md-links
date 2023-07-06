@@ -21,7 +21,7 @@ function mdLinks(inputPath, options = { validate: true }) {
 
   const resolvedPath = resolvePath(inputPath);
 
-  function processPathRecursive(directoryPath) {
+  function processPath(directoryPath) {
     return new Promise((resolve, reject) => {
       fs.lstat(directoryPath, (err, stats) => {
         if (err) {
@@ -38,7 +38,7 @@ function mdLinks(inputPath, options = { validate: true }) {
 
             const filePromises = files.map((file) => {
               const filePath = path.join(directoryPath, file);
-              return processPathRecursive(filePath);
+              return processPath(filePath);
             });
 
             Promise.all(filePromises)
@@ -63,22 +63,23 @@ function mdLinks(inputPath, options = { validate: true }) {
     });
   }
 
-  return processPathRecursive(resolvedPath);
+  return processPath(resolvedPath);
 }
 
-// Ejemplo de uso
-mdLinks('C:/Users/Gabi/OneDrive/Escritorio/DEV006-md-links/demo', { validate: true })
-  .then((links) => {
-    links.forEach((link) => {
-      console.log('href:', link.href);
-      console.log('text:', link.text);
-      console.log('file:', link.file);
-      console.log('--------------------------');
-    });
-  })
-  .catch((error) => {
-    console.error('Error:', error);
-  });
+// // Ejemplo de uso
+// mdLinks('C:/Users/Gabi/OneDrive/Escritorio/DEV006-md-links/demo', { validate: true })
+//   .then((links) => {
+//     links.forEach((link) => {
+//       console.log('href:', link.href);
+//       console.log('text:', link.text);
+//       console.log('file:', link.file);
+//       console.log('--------------------------');
+//     });
+//     console.log(links);
+//   })
+//   .catch((error) => {
+//     console.error('Error:', error);
+//   });
 
 module.exports = mdLinks;
 
