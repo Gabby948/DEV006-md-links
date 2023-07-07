@@ -136,9 +136,14 @@ function extractLinksFromMdFile(filePath) {
 //     });
 // }
 function validateLinks(links) {
+  console.log("validateLinks links: ", links)
   const linkPromises = links.map((link) => {
-    return axios.get(link.href)
+    const axiosPromise = axios.get(link.href)
+    // console.log('axiosPromise ', axiosPromise)
+    // console.log('link.href ', link.href)
+    return axiosPromise
       .then((response) => {
+        // console.log("response.status: ", response.status)
         const { status } = response;
         const statusText = status >= 200 && status < 404 ? 'ok' : 'fail';
 
