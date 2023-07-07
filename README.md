@@ -18,7 +18,8 @@ This npm package offers a powerful solution for extracting and analyzing links w
 ##  --Route flowchart
 
 
-<img src= "C:\Users\Gabi\OneDrive\Escritorio\DEV006-md-links\Images\ROUTE FLOWCHART.jpg">
+![image](https://github.com/Gabby948/DEV006-md-links/assets/125084134/8947714d-c711-431f-9a11-8a572a6d5c7c)
+
 
 
 ##  --Installation
@@ -56,6 +57,7 @@ To extract and validate the status of each link in a directory:
 
 ```
 md-links /path/to/directory --validate
+```
 
 ### --Information
 
