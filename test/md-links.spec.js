@@ -21,6 +21,7 @@ const pathInputFile = 'C:\\Users\\Gabi\\OneDrive\\Escritorio\\DEV006-md-links\\d
 const inputPath = process.cwd();
 // const pathInputDir = require('path').resolve();
 const completePath= path.resolve(inputPath,'demo');
+// const inputFile = path.resolve(completePath,'test2');
 // Printing current directory
 // console.log(completePath);
 
@@ -75,10 +76,13 @@ describe('pathExists', () => {
 
 describe('extractLinksFromMdFile', () => {
   test('debería extraer los enlaces correctamente', () => {
+    // jest.mock('fs');
     const mockContent = `
       # Node.js
-      Este es un [Node.js](https://www.wikipedia.org/) de ejemplo.
+      Este es un [Node.js](https://www.wikipedia.org/) de ejemplo en el mock.
     `;
+
+    // fs.readFile = jest.fn((path, encode, callbackFunction) => callbackFunction(undefined, mockContent));
 
     // Configura el mock para la función readFileContent
     // readFileContent.mockResolvedValue(mockContent);

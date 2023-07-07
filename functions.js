@@ -103,9 +103,12 @@ function extractLinksFromMdFile(filePath) {
     const md = new MarkdownIt();
     const html = md.render(content);
     const dom = new JSDOM(html);
+    // console.log('html ', html)
 
     const anchorElements = dom.window.document.querySelectorAll('a');
+    console.log("anchorElements ", anchorElements)
     anchorElements.forEach((element) => {
+      console.log("element ", element)
       const linkText = element.textContent;
       const linkUrl = element.getAttribute('href');
       links.push({ href: linkUrl, text: linkText, file: filePath });
