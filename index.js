@@ -66,8 +66,8 @@ function mdLinks(inputPath, options = { validate: true }) {
   return processPath(resolvedPath);
 }
 
-// // Ejemplo de uso
-// mdLinks('C:/Users/Gabi/OneDrive/Escritorio/DEV006-md-links/demo', { validate: false })
+// Ejemplo de uso
+// mdLinks('C:/Users/Gabi/OneDrive/Escritorio/DEV006-md-links/demo', { validate: true })
 //   .then((links) => {
 //     links.forEach((link) => {
 //       console.log('href:', link.href);
